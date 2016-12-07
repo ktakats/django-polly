@@ -1,0 +1,63 @@
+<!DOCTYPE HTML>
+<head>
+  <meta charset="utf-8">
+  <title>Polly</title>
+{%load static%}
+<link rel="apple-touch-icon" sizes="180x180" href="{% static 'polly/images/apple-touch-icon.png'%}">
+<link rel="icon" type="image/png" href="{% static 'polly/images/favicon-32x32.png' %}" sizes="32x32">
+<link rel="icon" type="image/png" href="{% static 'polly/images/favicon-16x16.png'%}" sizes="16x16">
+<link rel="manifest" href="{% static 'polly/images/manifest.json' %}">
+<link rel="mask-icon" href="{% static 'polly/images//safari-pinned-tab.svg' %}" color="#5bbad5">
+<meta name="apple-mobile-web-app-title" content="Polly">
+<meta name="application-name" content="Polly">
+<meta name="theme-color" content="#ffffff">
+
+<link rel='stylesheet' type='text/css' href="{% static 'polly/polly.css'%}">
+<!--<link rel='stylesheet' type='text/css' href='polly/polly.css'>
+-->
+  <link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css'>
+  <link rel='stylesheet'  href='https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css'>
+  <script src = "https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<!--  <script type="text/javascript" src="/javascripts/layout.js" charset="utf-8"></script>-->
+  <script src="//d3js.org/d3.v4.min.js"></script>
+</head>
+<html>
+<body>
+
+
+  <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+      <div class='container-fluid'>
+        <div class="navbar-header">
+          <a class="navbar-brand" href="/"><img src="{% static 'polly/images/bird_16px.png' %}"></img>&nbsp;Polly</a>
+        </div>
+
+        <div class="collapse navbar-collapse" id="MyNavBar">
+        <ul class="nav navbar-nav navbar-right">
+          <li>
+
+              {% if name %}
+              <a href="/profile">Hello, {{name}} </a>
+              {% else %}
+              <a href="#signinmodal" data-toggle="modal">Sign in</a>
+              {% endif %}
+
+          </li>
+          <li>
+            <a href="/myPolls" >Polls</a>
+          </li>
+          <li>
+            {% if name %}
+              <a href="/users/logout">Logout</a>
+            {% else %}
+            <a href="/about">About</a>
+            {% endif %}
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+<div class="jumbotron">
+{% block content %}{% endblock %}
+</div>
+</body>

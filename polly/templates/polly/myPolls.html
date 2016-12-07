@@ -1,0 +1,20 @@
+{% extends 'polly/layout.html' %}
+
+{% block content %}
+
+<!--{% load static %}
+<script type="text/javascript" src="{% static 'polly/javascripts/myPolls.js' %}" charset="utf-8"></script>-->
+
+<h2 class="title">Polls</h2>
+
+<div id="polls" class="container-fluid call">
+  {% for poll in poll_list %}
+    <a href="{% url 'polls:question-detail' poll.id%}"><span class="btn btn-default poll-div">{{poll.question_text}}<span></a></br>
+  {% endfor %}
+</div>
+{% if name %}
+<a href="newPoll"><div class="btn btn-default newpoll-btn"><i class="fa fa-plus"></i> New poll</div></a>
+{% else %}
+<div><p>Log in or register to create a new poll</p></div>
+{% endif %}
+{% endblock %}
