@@ -1,0 +1,15 @@
+{% extends 'polly/layout.html' %}
+
+{% block content %}
+
+<h1 class="title"> Create poll</h1>
+
+<form action='/newPoll' method="post">
+{% csrf_token%}
+{% load crispy_forms_tags %}
+{% crispy form %}
+<!--{{form.as_p}}-->
+</form>
+
+
+{% endblock %}

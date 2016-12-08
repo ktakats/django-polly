@@ -6,4 +6,5 @@ app_name="polly"
 urlpatterns=[
     url(r'^$', views.HomeView.as_view(), name='index'),
     url(r'^myPolls$', views.myPollsView.as_view()),
+    url(r'^newPoll$', views.create_new_poll),
 ]
