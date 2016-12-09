@@ -13,7 +13,7 @@ from rest_framework.reverse import reverse
 class QuestionList(generics.ListCreateAPIView):
     queryset=Question.objects.all()
     serializer_class=QuestionSerializer
-    permission_classes=(permissions.IsAuthenticatedOrReadOnly,)
+#    permission_classes=(permissions.IsAuthenticatedOrReadOnly,)
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
@@ -22,19 +22,19 @@ class QuestionList(generics.ListCreateAPIView):
 class QuestionDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset=Question.objects.all()
     serializer_class=QuestionSerializer
-    permission_classes=(permissions.IsAuthenticatedOrReadOnly,)
+#    permission_classes=(permissions.IsAuthenticatedOrReadOnly,)
 
 class OptionList(generics.ListCreateAPIView):
     queryset=Options.objects.all()
     serializer_class=OptionSerializer
-    permission_classes=(permissions.IsAuthenticatedOrReadOnly,)
+#    permission_classes=(permissions.IsAuthenticatedOrReadOnly,)
 
 
 
 class OptionDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset=Options.objects.all()
     serializer_class=OptionSerializer
-    permission_classes=(permissions.IsAuthenticatedOrReadOnly,)
+#    permission_classes=(permissions.IsAuthenticatedOrReadOnly,)
 
 class UserList(generics.ListAPIView):
     queryset=User.objects.all()

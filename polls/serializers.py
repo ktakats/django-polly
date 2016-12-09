@@ -19,6 +19,7 @@ class QuestionSerializer(serializers.ModelSerializer):
 
 
     def create(self, validated_data):
+        print validated_data
         options_data=validated_data.pop('options')
         question=Question.objects.create(**validated_data)
         for option_data in options_data:
@@ -47,9 +48,9 @@ class QuestionSerializer(serializers.HyperlinkedModelSerializer):
 
 
 
-class UserSerializer(serializers.HyperlinkedModelSerializer):
-    polls=serializers.HyperlinkedRelatedField(many=True, view_name='question-detail', read_only=True)
+class UserSerializer(serializers.ModelSerializer):
+    polls=QuestionSerializer(many=True, read_only=True)
 
     class Meta:
         model=User
-        fields=('url', 'id', 'username', 'polls')
+        fields=('id', 'username', 'polls')
