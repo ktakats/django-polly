@@ -9,7 +9,7 @@
 
 <div id="polls" class="container-fluid call">
   {% for poll in poll_list %}
-    <a href="{% url 'polls:question-detail' poll.id%}"><span class="btn btn-default poll-div">{{poll.question_text}}<span></a></br>
+    <a href="{% url 'polly:vote' poll.id%}"><span class="btn btn-default poll-div">{{poll.question_text}}<span></a></br>
   {% endfor %}
 </div>
 {% if name %}

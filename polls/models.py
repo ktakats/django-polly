@@ -10,7 +10,7 @@ import datetime
 class Question(models.Model):
     def __str__(self):
         return self.question_text
-
+    
     question_text=models.CharField(max_length=200)
     pub_date=models.DateTimeField('date published', default=timezone.now)
     owner=models.ForeignKey('auth.User', related_name='polls')

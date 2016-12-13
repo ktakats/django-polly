@@ -3,7 +3,7 @@ from django.http import HttpResponse
 from django.views import generic
 from polls.models import Question, Options
 from django.contrib.auth.models import User
-from forms import newPollForm
+from forms import newPollForm, viewPollForm
 # Create your views here.
 import urllib2, urllib
 from datetime import datetime
@@ -36,8 +36,23 @@ def create_new_poll(request):
             #post_data=[("question_text", data['question_text']), ("options", options), ("pub_date", time), ("owner", me)]
             #result=urllib2.urlopen('localhost:8000/api/polls/', urllib.urlencode(post_data))
             #print result.read()
+            return render(request, 'polly/myPolls.html')
 
     else:
         form=newPollForm()
         print form
     return render(request, 'polly/newPoll.html', {'form': form,})
+
+
+def show_and_view_poll(request, pk):
+    if request.method=='POST':
+        form=viewPollForm(request.POST)
+        if form.is_valid():
+            print request.POST
+    else:
+
+        ops=Options.objects.filter(question_id=pk)
+        #options={'options': (('1', 'One',), ('2', 'Two',))}
+        form=viewPollForm(q_id='33')
+
+    return render(request, 'polly/viewPoll.html',{'question': 'What?', 'form': form})

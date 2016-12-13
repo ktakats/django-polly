@@ -2,6 +2,7 @@ from django import forms
 from crispy_forms.helper import FormHelper
 from crispy_forms.bootstrap import FieldWithButtons, FormActions, StrictButton
 from crispy_forms.layout import Button, Div, Fieldset, Layout, Submit, HTML
+from polls.models import Question, Options
 
 class newPollForm(forms.Form):
     question_text=forms.CharField(label='question', max_length=100, required=True)
@@ -31,3 +32,12 @@ class newPollForm(forms.Form):
          )
 
         )
+
+class viewPollForm(forms.Form):
+    options=forms.ModelChoiceField(queryset=None, widget=forms.RadioSelect, empty_label=None)
+    def __init__(self, *args, **kwargs):
+
+        self.qid=kwargs.pop('q_id')
+        super(viewPollForm,self).__init__(*args, **kwargs)
+        #self.fields['options'].choices=self.ops
+        self.fields['options'].queryset=Options.objects.filter(question_id=33)

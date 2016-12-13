@@ -1,0 +1,16 @@
+{% extends 'polly/layout.html' %}
+
+{% block content %}
+
+<h1 class="title">{{question}}</h1>
+
+<form method="post">
+  {% csrf_token%}
+
+{% for option in form.options  %}
+{{option}}</br>
+{% endfor %}
+<input type=submit value='Submit' class='btn btn-default'/>
+</form>
+
+{% endblock %}
