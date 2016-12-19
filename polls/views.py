@@ -47,6 +47,6 @@ class UserDetail(generics.RetrieveAPIView):
 @api_view(['GET'])
 def api_root(request, format=None):
     return Response({
-        'users': reverse('user-list', request=request, format=format),
-        'polls': reverse('question-list', request=request, format=format)
+        'users': reverse('polls:user-list', request=request, format=format),
+        'polls': reverse('polls:question-list', request=request, format=format),
     })
