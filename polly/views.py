@@ -46,13 +46,22 @@ def create_new_poll(request):
 
 def show_and_view_poll(request, pk):
     if request.method=='POST':
-        form=viewPollForm(request.POST)
+        form=viewPollForm(request.POST, q_id=pk)
         if form.is_valid():
-            print request.POST
+            data=request.POST
+            ops=Options.objects.get(id=data.values()[1])
+            ops.votes+=1
+            ops.save()
+            resp=render(request, 'polly/viewPoll.html',{'question': ops.question, 'form': form})
+            resp.set_cookie('voted'+pk, True)
+
+
     else:
-
-        ops=Options.objects.filter(question_id=pk)
-        #options={'options': (('1', 'One',), ('2', 'Two',))}
-        form=viewPollForm(q_id='33')
-
-    return render(request, 'polly/viewPoll.html',{'question': 'What?', 'form': form})
+        try:
+            voted=request.COOKIES['voted'+pk]
+            resp=render(request, 'polly/viewPoll.html',{'question': 'You already voted'})
+        except:
+            form=viewPollForm(q_id=pk)
+            q=Question.objects.get(id=pk)
+            resp=render(request, 'polly/viewPoll.html',{'question': q.question_text, 'form': form})
+    return resp
