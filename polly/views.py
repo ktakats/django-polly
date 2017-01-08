@@ -3,10 +3,12 @@ from django.http import HttpResponse
 from django.views import generic
 from polls.models import Question, Options
 from django.contrib.auth.models import User
-from forms import newPollForm, viewPollForm
+from forms import newPollForm, viewPollForm# OptionFormSet
 # Create your views here.
 import urllib2, urllib
 from datetime import datetime
+
+from django.forms.formsets import formset_factory
 
 class HomeView(generic.TemplateView):
     template_name='polly/home.html'
@@ -18,10 +20,14 @@ class myPollsView(generic.ListView):
     def get_queryset(self):
         return Question.objects.all()
 
+
 def create_new_poll(request):
     if request.method=='POST':
+        print request
         form=newPollForm(request.POST)
-        if form.is_valid():
+    #    formset=OptionFormSet(request.POST)
+        if form.is_valid() and formset.is_valid():
+            print request.POST
             data=request.POST
             myoptions=[]
             time=datetime.now()
@@ -40,8 +46,8 @@ def create_new_poll(request):
 
     else:
         form=newPollForm()
-        print form
-    return render(request, 'polly/newPoll.html', {'form': form,})
+    #    formset=OptionFormSet(instance=Options())
+    return render(request, 'polly/newPoll.html', {'form': form})
 
 
 def show_and_view_poll(request, pk):
