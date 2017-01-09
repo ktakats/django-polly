@@ -7,8 +7,10 @@
 <form action='/newPoll' method="post">
 {% csrf_token%}
 {% load crispy_forms_tags %}
+{% for hidden in form.hidden_fields%}
+{{hidden}}
+{% endfor%}
 {% crispy form %}
-<!--{{form.as_p}}-->
 
 </form>
 

@@ -15,8 +15,8 @@ class NewPollTest(FunctionalTest):
 
         #Creates a new poll
         self.browser.find_element_by_id('id_question_text').send_keys('How many?')
-        self.browser.find_element_by_id('id_Option1').send_keys('41')
-        self.browser.find_element_by_id('id_Option2').send_keys('42\n')
+        self.browser.find_element_by_id('id_option_0').send_keys('41')
+        self.browser.find_element_by_id('id_option_1').send_keys('42\n')
 
         #After submitting the poll, the page redirects to the polls page.
         title=self.browser.find_element_by_css_selector('.title').text

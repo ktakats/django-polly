@@ -1,9 +1,10 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.views import generic
 from polls.models import Question, Options
 from django.contrib.auth.models import User
-from forms import newPollForm, viewPollForm# OptionFormSet
+from django.core.urlresolvers import reverse
+from forms import newPollForm, viewPollForm
 # Create your views here.
 import urllib2, urllib
 from datetime import datetime
@@ -22,19 +23,19 @@ class myPollsView(generic.ListView):
 
 
 def create_new_poll(request):
+    print request.method
     if request.method=='POST':
-        print request
         form=newPollForm(request.POST)
     #    formset=OptionFormSet(request.POST)
-        if form.is_valid() and formset.is_valid():
-            print request.POST
+        if form.is_valid():
             data=request.POST
+            print data['option_count']
             myoptions=[]
             time=datetime.now()
             me=User(id=1)
-            for i in data:
-                if i[:6]=="Option":
-                    myoptions.append({"option_text": data[i], "votes": 0})
+            for i in range(int(data['option_count'])):
+                text='option_{i}'.format(i=i)
+                myoptions.append({"option_text": data[text], "votes": 0})
             q=Question(question_text=data['question_text'], pub_date=time, owner=me)
             q.save()
             for option_data in myoptions:
@@ -42,7 +43,9 @@ def create_new_poll(request):
             #post_data=[("question_text", data['question_text']), ("options", options), ("pub_date", time), ("owner", me)]
             #result=urllib2.urlopen('localhost:8000/api/polls/', urllib.urlencode(post_data))
             #print result.read()
-            return render(request, 'polly/myPolls.html')
+            return redirect(reverse('polly:mypolls'))
+
+
 
     else:
         form=newPollForm()

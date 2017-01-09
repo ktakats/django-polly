@@ -10,16 +10,16 @@ class newPollForm(forms.models.ModelForm):
     option_count=forms.CharField(widget=forms.HiddenInput())
 
     class Meta:
-        model=Options
-        fields=['question']
+        model=Question
+        fields=['question_text']
 
         widgets={
-            'question': forms.fields.TextInput(attrs={
+            'question_text': forms.fields.TextInput(attrs={
                 'placeholder': 'Your question'
                 }),
             }
         labels={
-            'question': ''
+            'question_text': ''
         }
 
     def __init__(self, *args, **kwargs):
@@ -34,7 +34,7 @@ class newPollForm(forms.models.ModelForm):
         self.helper=FormHelper()
         self.helper.layout=Layout(
             HTML("<p>Question</p>"),
-            'question',
+            'question_text',
             Div(
                  HTML("<p>Options</p>"),
                  css_class='input-group col-md-4 col-md-offset-4 col-xs-2 col-xs-offset-4',
