@@ -7,7 +7,7 @@ from django.core.urlresolvers import reverse
 from forms import newPollForm, viewPollForm
 # Create your views here.
 import urllib2, urllib
-from datetime import datetime
+from django.utils import timezone
 
 from django.forms.formsets import formset_factory
 
@@ -29,9 +29,8 @@ def create_new_poll(request):
     #    formset=OptionFormSet(request.POST)
         if form.is_valid():
             data=request.POST
-            print data['option_count']
             myoptions=[]
-            time=datetime.now()
+            time=timezone.now()
             me=User(id=1)
             for i in range(int(data['option_count'])):
                 text='option_{i}'.format(i=i)
