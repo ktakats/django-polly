@@ -25,19 +25,12 @@ class myPollsView(generic.ListView):
 def create_new_poll(request):
     if request.method=='POST':
         form=newPollForm(data=request.POST)
-    #    formset=OptionFormSet(request.POST)
         if form.is_valid():
             form.save(owner=User(id=1))
-            #post_data=[("question_text", data['question_text']), ("options", options), ("pub_date", time), ("owner", me)]
-            #result=urllib2.urlopen('localhost:8000/api/polls/', urllib.urlencode(post_data))
-            #print result.read()
             return redirect(reverse('polly:mypolls'))
-
-
 
     else:
         form=newPollForm()
-    #    formset=OptionFormSet(instance=Options())
     return render(request, 'polly/newPoll.html', {'form': form})
 
 

@@ -48,7 +48,7 @@ class newPollForm(forms.models.ModelForm):
         for i in range(int(options_num)-1):
             self.helper.layout[2].append(FieldWithButtons('option_{i}'.format(i=i), StrictButton("-")),)
 
-        self.helper.layout[2].append(FieldWithButtons('option_1', StrictButton("+")))
+        self.helper.layout[2].append(FieldWithButtons('option_1', StrictButton("+", css_class="btn-add")))
         self.helper.layout.append(FormActions(Submit('submit', 'Submit', css_class='btn btn-default'),))
 
     def save(self, owner):
