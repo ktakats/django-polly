@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>Javascript tests</title>
+  <link rel="stylesheet" href="qunit-2.0.1.css">
+</head>
+<body>
+  <div id="qunit"></div>
+  <div id="qunit-fixture">
+    <form>
+      <input id="id_option_count" name="option_count" type="hidden" value="2" />
+      <div class="form-group" > <div class="controls "> <div class="input-group"> <input class="textinput textInput form-control" id="id_option_0" name="option_0" placeholder="Option 1" type="text" required /> <span class="input-group-btn"><button  type="button" class="btn btn-add">-</button>
+</span> </div> </div>
+    </form>
+
+  </div>
+
+  <script src = "https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+  <script src="../javascripts/newPoll.js"></script>
+  <script src="qunit-2.0.1.js"></script>
+
+  <script>
+
+  QUnit.test("Plus button creates a new option input", function(assert){
+    //    window.polly.initialize();
+        $('.btn-add').trigger('click');
+        assert.equal($('#id_option_2').is(':visible'), true);
+        assert.equal($('#id_option_count').val(), "3")
+
+      });
+
+  </script>
+</body>
+</html>
