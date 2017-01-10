@@ -7,7 +7,7 @@ from django.core.urlresolvers import reverse
 from forms import newPollForm, viewPollForm
 # Create your views here.
 import urllib2, urllib
-from django.utils import timezone
+
 
 from django.forms.formsets import formset_factory
 
@@ -23,22 +23,11 @@ class myPollsView(generic.ListView):
 
 
 def create_new_poll(request):
-    print request.method
     if request.method=='POST':
-        form=newPollForm(request.POST)
+        form=newPollForm(data=request.POST)
     #    formset=OptionFormSet(request.POST)
         if form.is_valid():
-            data=request.POST
-            myoptions=[]
-            time=timezone.now()
-            me=User(id=1)
-            for i in range(int(data['option_count'])):
-                text='option_{i}'.format(i=i)
-                myoptions.append({"option_text": data[text], "votes": 0})
-            q=Question(question_text=data['question_text'], pub_date=time, owner=me)
-            q.save()
-            for option_data in myoptions:
-                Options.objects.create(question=q, option_text=option_data['option_text'], votes=0)
+            form.save(owner=User(id=1))
             #post_data=[("question_text", data['question_text']), ("options", options), ("pub_date", time), ("owner", me)]
             #result=urllib2.urlopen('localhost:8000/api/polls/', urllib.urlencode(post_data))
             #print result.read()
