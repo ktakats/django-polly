@@ -10,9 +10,13 @@
   <div id="qunit"></div>
   <div id="qunit-fixture">
     <form>
+      <div
+    class="input-group col-md-4 col-md-offset-4 col-xs-2 col-xs-offset-4" >
       <input id="id_option_count" name="option_count" type="hidden" value="2" />
-      <div class="form-group" > <div class="controls "> <div class="input-group"> <input class="textinput textInput form-control" id="id_option_0" name="option_0" placeholder="Option 1" type="text" required /> <span class="input-group-btn"><button  type="button" class="btn btn-add">-</button>
-</span> </div> </div>
+      <div class="form-group" > <div class="controls "> <div class="input-group"> <input class="textinput textInput form-control" id="id_option_0" name="option_0" placeholder="Option 1" type="text" required /> <span class="input-group-btn"><button  type="button" class="btn btn-remove">-</button></span> </div> </div>
+
+      <div class="form-group" > <div class="controls "> <div class="input-group"> <input class="textinput textInput form-control" id="id_option_1" name="option_1" placeholder="Option 2" type="text" required /> <span class="input-group-btn"><button  type="button" class="btn btn-add">-</button></span> </div> </div>
+    </div>
     </form>
 
   </div>
@@ -25,11 +29,21 @@
 
   QUnit.test("Plus button creates a new option input", function(assert){
     //    window.polly.initialize();
+        var count=Number($('#id_option_count').val());
         $('.btn-add').trigger('click');
-        assert.equal($('#id_option_2').is(':visible'), true);
-        assert.equal($('#id_option_count').val(), "3")
+        var id="#id_option_"+String(count);
+        console.log(id);
+        assert.equal($(id).is(':visible'), true);
+        assert.equal($('#id_option_count').val(), String(count+1))
 
       });
+
+  QUnit.test("Minus button makes the option disapppear", function(assert){
+      var count=$('#id_option_count').val();
+      $('.btn-remove').trigger('click');
+      assert.equal($('#id_option_0').is(':visible'), false);
+      assert.equal($('#id_option_count').val(), String(Number(count)-1));
+  })
 
   </script>
 </body>
