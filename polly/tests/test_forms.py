@@ -1,5 +1,5 @@
 from django.test import TestCase
-from polls.models import Question
+from polls.models import Question, Options
 from polly.forms import newPollForm
 from django.contrib.auth.models import User
 
@@ -22,3 +22,11 @@ class NewPollFormTest(TestCase):
         self.assertTrue(form.is_valid())
         new_question=form.save(user)
         self.assertEqual(new_question, Question.objects.first())
+
+    def test_form_can_have_more_than_two_options(self):
+        user=User.objects.create()
+        form=newPollForm(data={'question_text': 'Bla', 'option_0': 'zero', 'option_1': 'one', 'option_2': 'two', 'option_count': '3'})
+        self.assertTrue(form.is_valid())
+        new_question=form.save(user)
+        self.assertEqual(new_question, Question.objects.first())
+        self.assertIn('two', Options.objects.all())

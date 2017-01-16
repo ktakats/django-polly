@@ -4,7 +4,8 @@ from django.views import generic
 from polls.models import Question, Options
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
-from forms import newPollForm, viewPollForm
+from forms import newPollForm, viewPollForm, OptionForm
+from django.forms.formsets import formset_factory
 # Create your views here.
 import urllib2, urllib
 
@@ -23,15 +24,19 @@ class myPollsView(generic.ListView):
 
 
 def create_new_poll(request):
+    OptionFormSet=formset_factory(OptionForm, extra=2)
     if request.method=='POST':
         form=newPollForm(data=request.POST)
-        if form.is_valid():
-            form.save(owner=User(id=1))
-            return redirect(reverse('polly:mypolls'))
+        formset=OptionFormSet(request.POST)
+        if form.is_valid() and formset.is_valid():
+            options=formset.cleaned_data
+            form.save(owner=User(id=1), options=options)
+        return redirect(reverse('polly:mypolls'))
 
     else:
         form=newPollForm()
-    return render(request, 'polly/newPoll.html', {'form': form})
+        formset=OptionFormSet()
+    return render(request, 'polly/newPoll.html', {'form': form, 'formset': formset})
 
 
 def show_and_view_poll(request, pk):
