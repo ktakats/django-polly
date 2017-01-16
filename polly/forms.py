@@ -22,7 +22,7 @@ class OptionForm(forms.models.ModelForm):
         self.helper.layout=Layout(
 
             Div('option_text', css_class="optionfield col-md-4 col-md-offset-4 col-xs-2 col-xs-offset-4")
-    
+
         )
 
 
