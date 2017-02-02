@@ -1,8 +1,9 @@
 from django.test import TestCase
 from polls.models import Question, Options
-from polly.forms import newPollForm, OptionForm
+from polly.forms import newPollForm, OptionForm, viewPollForm
 from django.contrib.auth.models import User
 from django.forms.formsets import formset_factory
+from django.http import QueryDict
 
 class NewPollFormTest(TestCase):
 
@@ -36,3 +37,27 @@ class NewPollFormTest(TestCase):
         new_question=form.save(owner=user, options=formset.cleaned_data)
         self.assertEqual(new_question, Question.objects.first())
         self.assertEqual(3, Options.objects.count())
+
+class VotingFormTest(TestCase):
+
+    def test_form_displays_all_options(self):
+        user=User.objects.create()
+        q=Question.objects.create(question_text='Proba', owner=user)
+        op1=Options.objects.create(question=q, option_text='op1')
+        op2=Options.objects.create(question=q, option_text='op2')
+        op3=Options.objects.create(question=q, option_text='op3')
+        form=viewPollForm(q_id=q.id)
+        self.assertIn('op1', form.as_p())
+        self.assertIn('op2', form.as_p())
+        self.assertIn('op3', form.as_p())
+
+    def test_form_save_function(self):
+        user=User.objects.create()
+        q=Question.objects.create(question_text='test', owner=user)
+        op1=Options.objects.create(question=q, option_text="83")
+        op2=Options.objects.create(question=q, option_text="84")
+        form=viewPollForm(data={'option_text': op1.id}, q_id=q.id)
+        self.assertTrue(form.is_valid())
+        form.save()
+        op=Options.objects.get(option_text='83')
+        self.assertEqual(op.votes, 1)

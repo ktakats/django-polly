@@ -30,7 +30,8 @@ def create_new_poll(request):
         formset=OptionFormSet(request.POST)
         if form.is_valid() and formset.is_valid():
             options=formset.cleaned_data
-            form.save(owner=User(id=1), options=options)
+            owner=User.objects.get(username='admin')
+            form.save(owner=owner, options=options)
         return redirect(reverse('polly:mypolls'))
 
     else:
@@ -42,11 +43,13 @@ def create_new_poll(request):
 def show_and_view_poll(request, pk):
     if request.method=='POST':
         form=viewPollForm(request.POST, q_id=pk)
+        print request.POST
+        print form.is_valid()
         if form.is_valid():
             data=request.POST
-            ops=Options.objects.get(id=data.values()[1])
-            ops.votes+=1
-            ops.save()
+    #        ops=Options.objects.get(id=data.values()[1])
+    #        ops.votes+=1
+    #        ops.save()
             resp=render(request, 'polly/viewPoll.html',{'question': ops.question, 'form': form})
             resp.set_cookie('voted'+pk, True)
 
@@ -56,7 +59,11 @@ def show_and_view_poll(request, pk):
             voted=request.COOKIES['voted'+pk]
             resp=render(request, 'polly/viewPoll.html',{'question': 'You already voted'})
         except:
-            form=viewPollForm(q_id=pk)
             q=Question.objects.get(id=pk)
+            form=viewPollForm(q_id=pk)
+            print form
             resp=render(request, 'polly/viewPoll.html',{'question': q.question_text, 'form': form})
+        #    except DoesNotExist:
+        #        pass
+    #            resp=render(request, 'polly/viewPoll.html', {'error': })
     return resp

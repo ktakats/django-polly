@@ -1,7 +1,7 @@
 from django import forms
 from django.utils import timezone
 from crispy_forms.helper import FormHelper
-from crispy_forms.bootstrap import FieldWithButtons, FormActions, StrictButton, Field
+from crispy_forms.bootstrap import FieldWithButtons, FormActions, StrictButton, Field, InlineRadios
 from crispy_forms.layout import Button, Div, Fieldset, Layout, Submit, HTML
 from polls.models import Options, Question
 
@@ -55,10 +55,17 @@ class newPollForm(forms.models.ModelForm):
         return q
 
 
-class viewPollForm(forms.Form):
-    options=forms.ModelChoiceField(queryset=None, widget=forms.RadioSelect, empty_label=None)
-    def __init__(self, *args, **kwargs):
+class viewPollForm(OptionForm):
 
+    option_text=forms.ModelChoiceField(queryset=None, widget=forms.RadioSelect, empty_label=None)
+
+    def __init__(self, *args, **kwargs):
         self.qid=kwargs.pop('q_id')
         super(viewPollForm,self).__init__(*args, **kwargs)
-        self.fields['options'].queryset=Options.objects.filter(question_id=self.qid)
+        self.fields['option_text'].queryset=Options.objects.filter(question_id=self.qid)
+
+    def save(self):
+        option=self.cleaned_data['option_text']
+        option.votes+=1
+        option.save()
+        return option

@@ -48,3 +48,15 @@ class NewPollViewTests(TestCase):
     def test_uses_newPoll_template(self):
         response=self.client.get('/newPoll')
         self.assertTemplateUsed(response, 'polly/newPoll.html')
+
+class ViewPollTests(TestCase):
+
+    def test_view_uses_viewPoll_template(self):
+        user=create_user('test', 'test', 'test@test.com')
+        question=create_question("Test?", user)
+        response=self.client.get('/viewPoll/1')
+        self.assertTemplateUsed(response, 'polly/viewPoll.html')
+
+    def test_view_shows_error_if_poll_doesnot_exist(self):
+        response=self.client.get('/viewPoll/1')
+        self.assertContains(response, "Poll does not exist!")

@@ -4,7 +4,7 @@ from selenium import webdriver
 import sys
 
 class FunctionalTest(StaticLiveServerTestCase):
-
+    """
     @classmethod
     def setUpClass(cls):
         for arg in sys.argv:
@@ -28,3 +28,10 @@ class FunctionalTest(StaticLiveServerTestCase):
     def tearDown(self):
         self.browser.quit()
         super(FunctionalTest, self).tearDown()
+    """
+    def setUp(self):
+        self.browser=webdriver.Chrome("/usr/lib/chromium-browser/chromedriver")
+        self.browser.implicitly_wait(5)
+
+    def tearDown(self):
+        self.browser.quit()

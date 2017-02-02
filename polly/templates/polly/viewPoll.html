@@ -3,13 +3,19 @@
 {% block content %}
 
 <h1 class="title">{{question}}</h1>
-
+{% load crispy_forms_tags %}
 <form method="post">
   {% csrf_token%}
 
-{% for option in form.options  %}
+<!--{% for option in form.options  %}
 {{option}}</br>
-{% endfor %}
+{% endfor %}-->
+
+{% for radio in form.option_text%}
+<div class="option">
+  {{radio}}
+</div>
+{%endfor%}
 <input type=submit value='Submit' class='btn btn-default'/>
 </form>
 
