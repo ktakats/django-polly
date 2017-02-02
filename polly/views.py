@@ -6,6 +6,7 @@ from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from forms import newPollForm, viewPollForm, OptionForm
 from django.forms.formsets import formset_factory
+from django.core.exceptions import ObjectDoesNotExist
 # Create your views here.
 import urllib2, urllib
 
@@ -41,29 +42,23 @@ def create_new_poll(request):
 
 
 def show_and_view_poll(request, pk):
+    try:
+        q=Question.objects.get(id=pk)
+    except ObjectDoesNotExist:
+        return render(request, 'polly/viewPoll.html', {'error_message': "Poll does not exist!"})
+
     if request.method=='POST':
         form=viewPollForm(request.POST, q_id=pk)
-        print request.POST
-        print form.is_valid()
         if form.is_valid():
-            data=request.POST
-    #        ops=Options.objects.get(id=data.values()[1])
-    #        ops.votes+=1
-    #        ops.save()
-            resp=render(request, 'polly/viewPoll.html',{'question': ops.question, 'form': form})
+            form.save()
+            resp=render(request, 'polly/viewPoll.html',{'question': q.question_text, 'form': form})
             resp.set_cookie('voted'+pk, True)
-
-
     else:
         try:
             voted=request.COOKIES['voted'+pk]
             resp=render(request, 'polly/viewPoll.html',{'question': 'You already voted'})
         except:
-            q=Question.objects.get(id=pk)
             form=viewPollForm(q_id=pk)
-            print form
             resp=render(request, 'polly/viewPoll.html',{'question': q.question_text, 'form': form})
-        #    except DoesNotExist:
-        #        pass
-    #            resp=render(request, 'polly/viewPoll.html', {'error': })
+
     return resp
