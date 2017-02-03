@@ -9,6 +9,7 @@ from django.forms.formsets import formset_factory
 from django.core.exceptions import ObjectDoesNotExist
 # Create your views here.
 import urllib2, urllib
+import json
 
 
 from django.forms.formsets import formset_factory
@@ -56,7 +57,9 @@ def show_and_view_poll(request, pk):
     else:
         try:
             voted=request.COOKIES['voted'+pk]
-            resp=render(request, 'polly/viewPoll.html',{'question': 'You already voted'})
+            ops=Options.objects.filter(question_id=pk)
+            result=json.dumps({op.option_text: op.votes for op in ops})
+            resp=render(request, 'polly/viewPoll.html',{'question': q.question_text, 'result': result})
         except:
             form=viewPollForm(q_id=pk)
             resp=render(request, 'polly/viewPoll.html',{'question': q.question_text, 'form': form})

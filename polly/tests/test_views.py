@@ -1,8 +1,9 @@
 from django.test import TestCase
 from django.urls import reverse
 from django.contrib.auth.models import User
-
+from Cookie import SimpleCookie
 from polls.models import Question, Options
+import json
 # Create your tests here.
 
 def create_user(username, password, email):
@@ -60,3 +61,20 @@ class ViewPollTests(TestCase):
     def test_view_shows_error_if_poll_doesnot_exist(self):
         response=self.client.get('/viewPoll/1')
         self.assertContains(response, "Poll does not exist!")
+
+    def test_after_voting_results_show_up(self):
+        user=create_user('test', 'test', 'test@test.com')
+        question=create_question("Test?", user)
+        self.client.cookies=SimpleCookie({'voted%d' % (question.id): True})
+        response=self.client.get('/viewPoll/%d' % (question.id))
+        self.assertContains(response, 'resultplot')
+
+    def test_after_voting_view_returns_json_data(self):
+        user=create_user('test', 'test', 'test@test.com')
+        question=create_question("Test?", user)
+        op1=create_option(question, 'op1', 1)
+        op1=create_option(question, 'op2', 2)
+        self.client.cookies=SimpleCookie({'voted%d' % (question.id): True})
+        response=self.client.get('/viewPoll/%d' % (question.id))
+        expected=json.dumps({'op1': 1, 'op2': 2})
+        self.assertEqual(response.context['result'], expected)

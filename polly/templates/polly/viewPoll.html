@@ -9,7 +9,7 @@
   {{error_message}}
 </div>
 
-{% else %}
+{% elif form %}
 <form method="post">
   {% csrf_token%}
 {% for radio in form.option_text%}
@@ -19,5 +19,12 @@
 {%endfor%}
 <input type=submit value='Submit' class='btn btn-default'/>
 </form>
+
+{% else %}
+
+<div class="resultplot">
+</div>
+
 {% endif %}
+
 {% endblock %}

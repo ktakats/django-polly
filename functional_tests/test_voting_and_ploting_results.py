@@ -25,7 +25,8 @@ class PollTest(FunctionalTest):
       self.assertIn('42', bla)
 
       #He decides to vote for 42
-      self.browser.find_element_by_css_selector('#id_options_1').click()
+      self.browser.find_element_by_css_selector('#id_option_text_1').click()
+      self.browser.find_element_by_css_selector('.btn-default').click()
       self.browser.find_element_by_id('resultplot')
 
 
