@@ -22,9 +22,14 @@
 
 {% else %}
 
-<div class="resultplot">
+<div class="resultplot">{{result}}
 </div>
-
+{%load static%}
+<script type="text/javascript" src="{% static 'polly/javascripts/plotPollResults.js' %}"></script>
+<script type="text/javascript">
+var data=JSON.parse('{{result |safe }}');
+plotResults(data)
+</script>
 {% endif %}
 
 {% endblock %}
