@@ -55,7 +55,7 @@ def show_and_view_poll(request, pk):
             ops=Options.objects.filter(question_id=pk)
             result=json.dumps({'data':[[op.option_text, op.votes] for op in ops]})
             resp=render(request, 'polly/viewPoll.html',{'question': q.question_text, 'result': result})
-            resp.set_cookie('voted'+pk, True)
+        #    resp.set_cookie('voted'+pk, True)
     else:
         try:
             voted=request.COOKIES['voted'+pk]

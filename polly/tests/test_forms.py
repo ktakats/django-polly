@@ -1,6 +1,6 @@
 from django.test import TestCase
 from polls.models import Question, Options
-from polly.forms import newPollForm, OptionForm, viewPollForm
+from polly.forms import newPollForm, OptionForm, viewPollForm, RegisterForm
 from django.contrib.auth.models import User
 from django.forms.formsets import formset_factory
 from django.http import QueryDict
@@ -61,3 +61,27 @@ class VotingFormTest(TestCase):
         form.save()
         op=Options.objects.get(option_text='83')
         self.assertEqual(op.votes, 1)
+
+class RegisterFormTest(TestCase):
+
+    def test_form_has_placeholder(self):
+        form=RegisterForm()
+        self.assertIn('placeholder="username"', form.as_p())
+        self.assertIn('placeholder="email"', form.as_p())
+
+    def test_form_validation_for_blank_items(self):
+        form=RegisterForm(data={})
+        self.assertFalse(form.is_valid())
+        self.assertEqual(form.errors['username'], ['Username is missing'])
+
+    def test_username_must_be_unique(self):
+        old_user=User.objects.create(username='johnny', password='bla')
+        form=RegisterForm(data={"username": 'johnny', 'password': 'la'})
+        self.assertFalse(form.is_valid())
+        self.assertEqual(form.errors['username'], ["Username already exists."])
+
+    def test_user_email_must_be_unique(self):
+        old_user=User.objects.create(email="johnny@example.com", username="johnny", password="bla")
+        form=RegisterForm(data={'email': "johnny@example.com", 'username': "john", 'password': 'la'})
+        self.assertFalse(form.is_valid())
+        self.assertEqual(form.errors['email'], ['Email address already exists.'])

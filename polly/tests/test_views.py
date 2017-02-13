@@ -76,5 +76,5 @@ class ViewPollTests(TestCase):
         op1=create_option(question, 'op2', 2)
         self.client.cookies=SimpleCookie({'voted%d' % (question.id): True})
         response=self.client.get('/viewPoll/%d' % (question.id))
-        expected=json.dumps({'op1': 1, 'op2': 2})
+        expected=json.dumps({'data': [['op2', 2], ['op1', 1]]})
         self.assertEqual(response.context['result'], expected)

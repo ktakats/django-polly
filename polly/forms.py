@@ -4,6 +4,7 @@ from crispy_forms.helper import FormHelper
 from crispy_forms.bootstrap import FieldWithButtons, FormActions, StrictButton, Field, InlineRadios
 from crispy_forms.layout import Button, Div, Fieldset, Layout, Submit, HTML
 from polls.models import Options, Question
+from django.contrib.auth.models import User
 
 
 class OptionForm(forms.models.ModelForm):
@@ -69,3 +70,32 @@ class viewPollForm(OptionForm):
         option.votes+=1
         option.save()
         return option
+
+class RegisterForm(forms.models.ModelForm):
+
+    class Meta:
+        model=User
+        fields=['username', 'email', 'password']
+        widgets={
+            'username': forms.fields.TextInput(attrs={
+                'placeholder': 'username',
+                }),
+            'email': forms.fields.EmailInput(attrs={
+                'placeholder': 'email',
+                }),
+            'password': forms.PasswordInput(attrs={
+                'placeholder': 'password',
+                }),
+            }
+        error_messages={
+            'username': {'required': "Username is missing", 'unique': "Username already exists."},
+            'email': {'required': "Email is missing"},
+            'password': {'required': "Password is missing"}
+        }
+
+    def clean_email(self):
+        email=self.cleaned_data.get('email')
+        username=self.cleaned_data.get('username')
+        if email and User.objects.filter(email=email).exclude(username=username).count():
+            raise forms.ValidationError(u'Email address already exists.')
+        return email
